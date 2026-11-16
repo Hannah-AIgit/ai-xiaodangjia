@@ -165,7 +165,7 @@ function refreshMembershipUI(){
  el('memberHomeChefOpen').textContent=plus?'选择套餐并预约':'🔒 Plus 解锁预约';
  el('advancedBudget').textContent=plus?'✨ AI 高级预算优化':'🔒 Plus 高级预算优化';
  el('suggestPantry').textContent=plus?'AI 智能补购':'🔒 AI 智能补购';
- el('voiceOpen').classList.remove('locked-feature');el('photoUpload').closest('.file-btn').classList.toggle('locked-feature',!plus);
+ el('voiceOpen').classList.remove('locked-feature');for(const id of ['photoCaptureOpen','photoUploadOpen'])el(id).classList.toggle('locked-feature',!plus);
 }
 function refreshBudgetLiveSummary(){const data=appState.shopping(),symbol=appState.currencySymbol(data.budget?.currency),spent=(data.items||[]).filter(item=>item.bought).reduce((sum,item)=>sum+Number(item.actual??item.estimate??0),0),budget=Number(data.budget?.amount)||0,remaining=budget-spent;el('budgetLiveSummary').textContent=budget?`实际已支出 ${symbol}${spent.toLocaleString('zh-CN')} · ${remaining>=0?'剩余':'已超出'} ${symbol}${Math.abs(remaining).toLocaleString('zh-CN')}`:'设置预算后，将在这里同步显示实际支出与剩余金额';el('budgetLiveSummary').classList.toggle('over',remaining<0);}
 function refreshPrices(){
@@ -335,8 +335,11 @@ async function processFamilyVoice(){
 }
 el('parseVoice').onclick=processFamilyVoice;
 function showCaptured(data){photoDataUrl=data;el('photoPreview').src=data;el('photoPreview').hidden=false;el('recognizePhoto').disabled=false;el('visionStatus').textContent='已准备照片，点击「AI 识别这张照片」。';}
-function canvasToJpg(source,w,h){const max=1100;const factor=Math.min(1,max/Math.max(w,h));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(w*factor));c.height=Math.max(1,Math.round(h*factor));c.getContext('2d').drawImage(source,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.78);}
-el('photoUpload').onchange=event=>{if(!appState.isPlus()){event.target.value='';openLocked('Camera-based ingredient recognition is available for Plus members.');return;}const f=event.target.files?.[0];if(!f)return;if(f.size>15e6){showToast('图片请小于15 MB');return;}const url=URL.createObjectURL(f);const im=new Image();im.onload=()=>{showCaptured(canvasToJpg(im,im.naturalWidth,im.naturalHeight));URL.revokeObjectURL(url);};im.onerror=()=>{showToast('图片读取失败');URL.revokeObjectURL(url);};im.src=url;};
+window.KitchenPhotoPicker.init({
+ requireAccess:()=>requirePlus('Camera-based ingredient recognition is available for Plus members.'),
+ onPhoto:showCaptured,
+ showMessage:showToast
+});
 el('recognizePhoto').onclick=async()=>{
  if(!appState.isPlus()){openLocked('Camera-based ingredient recognition is available for Plus members.');return;}
  if(!photoDataUrl){showToast('请先拍照或上传照片');return;}el('visionStatus').textContent='正在识别图片…';el('recognizePhoto').disabled=true;

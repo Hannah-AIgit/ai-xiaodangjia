@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#fff8ef" />
     <title>AI小当家</title>
-    <link rel="stylesheet" href="styles.css?v=20261116-2" />
+    <link rel="stylesheet" href="styles.css?v=20261117-photo-1" />
     <link rel="stylesheet" href="shared-header.css?v=20261116-1" />
   </head>
   <body>
@@ -28,7 +28,12 @@
       <section id="cameraPanel" class="capture-panel" hidden>
         <div class="section-heading"><strong>🥕 用现有食材做饭 · 📷 拍照识别</strong><button class="mini-close" data-hide="cameraPanel" type="button">关闭</button></div>
         <p class="tool-tip">从库存出发：拍摄或上传冰箱中的食材、现成菜品。识别后核对库存，再生成食谱灵感及补购清单。识别结果需要你确认；单凭照片无法确定重量、过敏原或食物是否安全。</p>
-        <label class="file-btn">拍照／上传现有食材照片<input id="photoUpload" type="file" accept="image/*" capture="environment" /></label>
+        <div class="photo-picker-actions">
+          <button id="photoCaptureOpen" class="file-btn" type="button">拍摄</button>
+          <button id="photoUploadOpen" class="file-btn" type="button">上传现有照片</button>
+        </div>
+        <input id="photoCapture" type="file" accept="image/*" capture="environment" hidden />
+        <input id="photoUpload" type="file" accept="image/*" hidden />
         <img id="photoPreview" class="photo-preview" alt="待识别的食材照片" hidden />
         <button id="recognizePhoto" type="button" class="primary-small full" disabled>AI 识别这张照片</button>
         <p id="visionStatus" class="tool-tip" role="status">上传照片后，我会帮你整理看到的食材；结果仍需要你确认。</p>
@@ -112,6 +117,12 @@
         <a class="nav-item" href="shopping-budget.html"><span>🛒</span>采购</a>
       </nav>
     </main>
+    <dialog id="photoCameraDialog" class="small-dialog photo-camera-dialog" aria-labelledby="photoCameraTitle">
+      <div class="dialog-head"><strong id="photoCameraTitle">拍摄食材</strong></div>
+      <video id="photoCameraVideo" autoplay muted playsinline aria-label="相机预览"></video>
+      <p id="photoCameraStatus" class="tool-tip" role="status">正在连接相机…</p>
+      <div class="tool-row"><button id="photoCameraShutter" class="primary-small" type="button" disabled>拍摄</button><button id="photoCameraCancel" class="secondary-small" type="button">取消</button></div>
+    </dialog>
     <dialog id="membershipDialog" class="membership-dialog"><div class="dialog-head"><div><strong>Membership</strong><small id="membershipStatus"></small></div><button type="button" data-dialog-close="membershipDialog">×</button></div>
       <p class="tool-tip">首次使用可享 7 天全功能试用，包含全部 Plus 功能和 Home Chef 预约体验。实际厨师服务按次或套餐另付，当前支付与预约均为 Demo。</p>
       <p id="membershipPricingNote" class="tool-tip">正在按地区设置显示币种…</p>
@@ -125,6 +136,6 @@
     <dialog id="expiryDialog" class="small-dialog"><div class="dialog-head"><strong id="expiryDialogTitle">优先使用食材</strong><button type="button" data-dialog-close="expiryDialog">×</button></div><p id="expiryDialogText"></p><button id="addExpiryToPlan" class="dialog-primary" type="button">加入本周食谱</button></dialog>
     <dialog id="lockedDialog" class="small-dialog"><div class="dialog-head"><strong>🔒 Plus Feature</strong><button type="button" data-dialog-close="lockedDialog">×</button></div><p id="lockedMessage"></p><button class="dialog-primary" id="lockedUpgrade" type="button">Upgrade to Plus</button></dialog>
     <div id="toast" class="toast" role="status"></div>
-    <script src="config.js?v=20261116-10"></script><script src="state.js?v=20261116-9"></script><script src="locale.js?v=20261116-9"></script><script src="pricing.js?v=20261116-10"></script><script src="app.js?v=20261116-9"></script>
+    <script src="config.js?v=20261116-10"></script><script src="state.js?v=20261116-9"></script><script src="locale.js?v=20261116-9"></script><script src="pricing.js?v=20261116-10"></script><script src="pantry-photos.js?v=1"></script><script src="app.js?v=20261117-photo-1"></script>
   </body>
 </html>
