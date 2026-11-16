@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+<script src="github-pages-runtime.js?v=1"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>本周食谱 · AI 小当家</title>
+    <link rel="stylesheet" href="weekly-menu.css?v=4" />
+    <link rel="stylesheet" href="membership.css?v=20261116-13" />
+    <link rel="stylesheet" href="shared-header.css?v=20261116-1" />
+  </head>
+  <body>
+    <main class="weekly-app">
+      <header class="hero" aria-label="本周食谱标题">
+        <div class="hero-art"></div>
+        <div class="hero-copy"><p>AI 小当家</p><h1>本周吃什么</h1><span>你一周的餐桌计划</span></div>
+        <button id="membershipOpen" class="membership-pill" type="button">会员 / Upgrade</button>
+      </header>
+      <p id="menuIntro" class="menu-intro" hidden></p>
+
+      <nav id="dayTabs" class="day-tabs" aria-label="选择日期"></nav>
+      <p id="dayHint" class="day-hint"></p>
+      <section id="mealSections" class="meal-sections" aria-label="当天食谱"></section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="主导航">
+      <a href="index.html"><span>🗓️</span>规划</a>
+      <a class="active" href="weekly-menu.html"><span>🍲</span>一周食谱</a>
+      <a href="shopping-budget.html"><span>🛒</span>采购</a>
+    </nav>
+
+    <aside id="replacePanel" class="replace-panel" hidden aria-label="更换菜品"></aside>
+    <dialog id="recipeDialog" class="recipe-dialog" aria-labelledby="recipeTitle">
+      <div class="recipe-dialog-head"><div><small>Recipe Detail</small><h2 id="recipeTitle"></h2></div><button type="button" data-close-recipe aria-label="关闭">×</button></div>
+      <img id="recipePhoto" class="recipe-photo" alt="菜品真实餐图" />
+      <div id="recipeMeta" class="recipe-meta"></div>
+      <section><h3>Ingredients / 食材</h3><p class="recipe-hint">米、油、酱油、糖和盐默认家中已有，不计入采购预算。</p><div id="recipeIngredients" class="recipe-ingredients"></div></section>
+      <section><div class="recipe-section-heading"><h3>How to Cook / 制作步骤</h3><button id="recipeVideoOpen" type="button">▶ 视频教学</button></div><div id="recipeSteps" class="recipe-steps"></div></section>
+    </dialog>
+    <dialog id="partnerDialog" class="partner-dialog"><div class="recipe-dialog-head"><div><small>Shopping Partner</small><h2>去购买</h2></div><button type="button" data-close-partner aria-label="关闭">×</button></div><p>Third-party shopping platform integration is not connected in this demo.</p><div id="partnerList"></div><button id="sampleProduct" type="button">View Sample Product</button></dialog>
+    <dialog id="videoDialog" class="video-dialog"><div class="recipe-dialog-head"><div><small>Video Tutorial</small><h2 id="videoDishTitle">视频教学</h2></div><button type="button" data-close-video aria-label="关闭">×</button></div><p id="videoRegionStatus">正在根据所在地区推荐视频平台…</p><div id="videoPlatformList" class="video-platform-list"></div><label class="remember-video"><input id="rememberVideoPlatform" type="checkbox" checked /> 记住我的视频平台偏好</label><button id="openVideoTutorial" type="button">前往所选平台搜索教学</button><small>搜索结果由第三方平台提供，内容请自行判断。</small></dialog>
+    <div id="toast" class="toast" role="status"></div>
+    <script src="config.js?v=20261116-10"></script><script src="state.js?v=20261116-9"></script><script src="locale.js?v=20261116-9"></script><script src="pricing.js?v=20261116-10"></script><script src="membership.js?v=20261116-11"></script><script src="weekly-menu.js?v=20261116-9"></script>
+  </body>
+</html>

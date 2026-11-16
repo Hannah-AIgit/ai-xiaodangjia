@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fff8ef" />
+    <title>AI小当家</title>
+    <link rel="stylesheet" href="styles.css?v=20261116-2" />
+    <link rel="stylesheet" href="shared-header.css?v=20261116-1" />
+  </head>
+  <body>
+    <main class="app-shell" aria-label="AI小当家">
+      <header class="hero">
+        <div>
+          <h1>这周想吃点什么？</h1>
+        </div>
+        <span class="hero-spark">✦</span>
+        <button id="membershipOpen" class="membership-pill" type="button">会员 / Upgrade</button>
+      </header>
+
+      <section class="quick-actions" aria-label="快捷提问">
+        <button type="button" id="pantryOpen" aria-expanded="false" aria-controls="cameraPanel"><span>🥕</span>用现有食材做饭</button>
+        <button type="button" id="voiceOpen" aria-controls="voicePanel"><span>🎙️</span>语音说需求</button>
+        <button type="button" id="preferenceQuick"><span>⚙️</span>我的计划偏好</button>
+      </section>
+
+      <section id="cameraPanel" class="capture-panel" hidden>
+        <div class="section-heading"><strong>🥕 用现有食材做饭 · 📷 拍照识别</strong><button class="mini-close" data-hide="cameraPanel" type="button">关闭</button></div>
+        <p class="tool-tip">从库存出发：拍摄或上传冰箱中的食材、现成菜品。识别后核对库存，再生成食谱灵感及补购清单。识别结果需要你确认；单凭照片无法确定重量、过敏原或食物是否安全。</p>
+        <label class="file-btn">拍照／上传现有食材照片<input id="photoUpload" type="file" accept="image/*" capture="environment" /></label>
+        <img id="photoPreview" class="photo-preview" alt="待识别的食材照片" hidden />
+        <button id="recognizePhoto" type="button" class="primary-small full" disabled>AI 识别这张照片</button>
+        <p id="visionStatus" class="tool-tip" role="status">上传照片后，我会帮你整理看到的食材；结果仍需要你确认。</p>
+        <label class="tool-label">现有食材（识别后可修改；逗号分隔）<textarea id="pantryIngredients" rows="3" placeholder="例如：鸡蛋 4个，番茄 3个，青菜 200g"></textarea></label>
+        <label class="tool-label">现有成品菜（可修改；逗号分隔）<input id="preparedDishes" placeholder="例如：番茄炒蛋、剩米饭" /></label>
+        <div class="tool-row"><button id="savePantry" type="button" class="primary-small">保存已有食物</button><button id="suggestPantry" type="button" class="secondary-small">🔒 AI 智能补购</button></div>
+        <div id="pantryResult" class="review-output" hidden></div>
+      </section>
+
+      <section class="budget-card" id="budgetSection" aria-label="每周预算">
+        <div class="section-heading"><div><strong>💰 每周预算</strong><small>先选择币种，再填写每周可用于购买食材的金额</small></div></div>
+          <fieldset id="budgetFields">
+            <legend>每周预算</legend>
+            <div class="budget-fields">
+              <label>币种<select id="budgetCurrency"><option value="HKD" selected>港币（HK$）</option><option value="CNY">人民币（¥）</option></select></label>
+              <label>金额<input id="budgetAmount" inputmode="decimal" type="number" min="0" step="1" placeholder="请输入每周预算" /></label>
+            </div>
+            <small id="budgetHint">默认家里已有大米、食用油、酱油、糖和食盐；预算只计算本周新买的菜、肉、蛋等食材。</small>
+            <p id="budgetLiveSummary" class="budget-live-summary">本周尚无采购记录</p>
+            <button id="advancedBudget" class="advanced-budget" type="button">🔒 Plus 高级预算优化</button>
+          </fieldset>
+      </section>
+      <section id="voicePanel" class="capture-panel" hidden>
+        <div class="section-heading"><strong>🎙️ 一次说完全家需求</strong><button class="mini-close" data-hide="voicePanel" type="button">关闭</button></div>
+        <p class="tool-tip">可以连续说：“爸爸是上班族，工作日不吃午餐；妈妈喜欢清淡粤菜，不吃香菜；孩子周末在家吃，不吃辣。”系统会分别填入对应人员。</p>
+        <div class="tool-row"><button id="startListening" class="primary-small" type="button">● 开始说话</button><button id="stopListening" class="secondary-small" type="button" disabled>停止</button></div>
+        <label class="tool-label">全家需求（可修改）<textarea id="voiceTranscript" rows="4" placeholder="把所有人的需求一股脑说完，也可以在这里手动输入"></textarea></label>
+        <button id="parseVoice" class="primary-small full" type="button">自动填写全家信息</button>
+        <div id="voiceReview" class="review-output" hidden></div>
+      </section>
+
+      <section id="preferencesSection" class="preferences" aria-label="计划偏好" hidden>
+        <div class="preference-shell-head">
+          <button id="preferenceToggle" class="preferences-toggle" type="button" aria-expanded="true" aria-controls="preferencePanel">
+            <span>⚙️</span>
+            <span><strong>我的计划偏好</strong><small>用餐人员 · 每餐安排 · 个人口味与忌口</small></span>
+            <span class="chevron">⌄</span>
+          </button>
+          <button id="preferencesClose" class="mini-close" type="button">关闭</button>
+        </div>
+        <div id="preferencePanel" class="preference-panel">
+          <fieldset class="people-fieldset">
+            <div class="section-heading">
+              <div><legend>用餐人员</legend><small>每人独立编辑身份、偏好、忌口及用餐安排</small></div>
+              <button id="addPerson" class="add-person" type="button">＋ 添加人员</button>
+            </div>
+            <div id="peopleList" class="people-list"></div>
+            <small>用餐时间可按周一至周日单独开关。例如：上班日不吃午饭，周末则在家用餐。</small>
+          </fieldset>
+
+          <fieldset>
+            <legend>本周额外要求（全体）</legend>
+            <label class="full-field">特别想吃的菜、已有食材或其他安排
+              <textarea id="sharedNotes" rows="2" placeholder="例如：周三晚餐想吃鱼，冰箱里还有西红柿……"></textarea>
+            </label>
+          </fieldset>
+        </div>
+      </section>
+
+      <section id="assistantConversation" class="assistant-conversation" aria-label="与厨房助手对话" hidden>
+        <div class="section-heading"><div><strong>👩🏻‍🍳 和厨房助手聊聊</strong><small>只有在你发出需求或生成食谱后，我才会回复</small></div></div>
+        <div id="chat" class="chat" aria-live="polite"></div>
+        <section id="suggestionOutput" class="capture-panel" hidden><div class="section-heading"><strong>🍽️ 食谱灵感与补购清单</strong></div><div id="suggestionContent"></div></section>
+      </section>
+
+      <form id="chatForm" class="composer persistent-composer">
+        <label class="sr-only" for="messageInput">和厨房助手聊聊</label>
+        <input id="messageInput" autocomplete="off" placeholder="和厨师聊聊，补充想吃什么……" />
+        <button type="submit" aria-label="一键生成本周食谱" title="一键生成本周食谱">生成食谱 ➜</button>
+      </form>
+
+      <section class="expiry-card" aria-labelledby="expiryTitle">
+        <div class="section-heading"><div><strong id="expiryTitle">⏳ 临期提醒</strong><small>点击食材，可优先加入本周食谱</small></div><span class="expiry-count" id="expiryCount">2</span></div>
+        <div id="expiryList" class="expiry-list"></div>
+      </section>
+      <p id="apiStatus" class="api-status" role="status">正在检查对话服务…</p>
+
+      <nav class="bottom-nav" aria-label="主导航">
+        <button class="nav-item active" id="navPlan" type="button"><span>🗓️</span>规划</button>
+        <a class="nav-item" href="weekly-menu.html"><span>🍲</span>一周食谱</a>
+        <a class="nav-item" href="shopping-budget.html"><span>🛒</span>采购</a>
+      </nav>
+    </main>
+    <dialog id="membershipDialog" class="membership-dialog"><div class="dialog-head"><div><strong>Membership</strong><small id="membershipStatus"></small></div><button type="button" data-dialog-close="membershipDialog">×</button></div>
+      <p class="tool-tip">首次使用可享 7 天全功能试用，包含全部 Plus 功能和 Home Chef 预约体验。实际厨师服务按次或套餐另付，当前支付与预约均为 Demo。</p>
+      <p id="membershipPricingNote" class="tool-tip">正在按地区设置显示币种…</p>
+      <div class="plan-grid">
+        <article class="plan-card"><span>Basic</span><h2><span data-config="basicPrice">HK$8.80</span> <small>/ month</small></h2><b>7-Day All-Features Free Trial</b><ul><li>基础个性化食谱</li><li>用餐人员、偏好与忌口</li><li>一周食谱与基础清单</li><li>手动库存和每周预算</li></ul><button id="startBasicTrial" type="button">体验全部功能</button></article>
+        <article class="plan-card plus"><span>Plus</span><h2><span data-config="plusPrice">HK$13.20</span> <small>/ month</small></h2><b>Basic 全部功能＋</b><ul><li>用语音需求一键生成个性化食谱</li><li>库存拍照、临期优先与智能补购</li><li>高级预算优化与超额提醒</li><li>Home Chef 预约入口</li></ul><button id="upgradePlus" type="button">Upgrade to Plus</button></article>
+      </div>
+      <div id="paymentDemo" class="payment-demo" hidden><p>Demo only — real payment is not connected.</p><button id="simulateUpgrade" type="button">Simulate Upgrade</button></div>
+      <section class="membership-chef"><div class="dialog-head"><div><strong>🧑‍🍳 Home Chef 上门厨师</strong><small>全功能试用及 Plus 会员可预约；服务费按次或套餐另付</small></div></div><p id="membershipChefPricingNote" class="tool-tip"></p><a id="membershipChefSource" class="tool-tip" href="https://yunhejz.com/sh/index/article.html?id=3586" target="_blank" rel="noreferrer">报价依据</a><div id="membershipChefTiers" class="chef-tier-list"></div><button id="memberHomeChefOpen" class="dialog-primary" type="button">选择套餐并预约</button></section>
+    </dialog>
+    <dialog id="expiryDialog" class="small-dialog"><div class="dialog-head"><strong id="expiryDialogTitle">优先使用食材</strong><button type="button" data-dialog-close="expiryDialog">×</button></div><p id="expiryDialogText"></p><button id="addExpiryToPlan" class="dialog-primary" type="button">加入本周食谱</button></dialog>
+    <dialog id="lockedDialog" class="small-dialog"><div class="dialog-head"><strong>🔒 Plus Feature</strong><button type="button" data-dialog-close="lockedDialog">×</button></div><p id="lockedMessage"></p><button class="dialog-primary" id="lockedUpgrade" type="button">Upgrade to Plus</button></dialog>
+    <div id="toast" class="toast" role="status"></div>
+    <script src="config.js?v=20261116-10"></script><script src="state.js?v=20261116-9"></script><script src="locale.js?v=20261116-9"></script><script src="pricing.js?v=20261116-10"></script><script src="app.js?v=20261116-9"></script>
+  </body>
+</html>

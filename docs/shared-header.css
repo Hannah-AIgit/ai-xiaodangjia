@@ -1,0 +1,10 @@
+/* One illustration, scale and placement across the three main pages. */
+.app-shell,.weekly-app{width:min(100%,520px)}
+.app-shell>.hero,.weekly-app>.hero,.shopping-header.has-membership{height:250px;min-height:250px;background:#fff1d8 url("assets/shopping-kitchen-banner.png") left center/auto 100% no-repeat;border-radius:0 0 34px 34px}
+.weekly-app .hero-art{background:none}
+.app-shell>.hero>div{position:absolute;top:60px;right:14px;left:auto;width:47%;margin:0;padding:0;text-align:center}
+.weekly-app .hero-copy{top:62px;right:14px;width:49%}
+.shopping-header.has-membership>div{top:58px;right:14px;width:49%}
+.shopping-header.has-membership+.page-content{margin-top:0}
+@media(max-width:420px){.app-shell>.hero,.weekly-app>.hero,.shopping-header.has-membership{height:225px;min-height:225px}}
+@media(max-width:360px){.app-shell>.hero,.weekly-app>.hero,.shopping-header.has-membership{height:200px;min-height:200px}.app-shell>.hero>div{top:54px}.weekly-app .hero-copy{top:54px}.shopping-header.has-membership>div{top:50px}}

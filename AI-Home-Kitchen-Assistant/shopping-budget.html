@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fff8ef" />
+    <title>AI 小当家</title>
+    <link rel="stylesheet" href="shopping-budget.css?v=1" />
+    <link rel="stylesheet" href="membership.css?v=20261116-13" />
+    <link rel="stylesheet" href="shared-header.css?v=20261116-1" />
+  </head>
+  <body>
+    <main class="app-shell" aria-label="AI 小当家">
+      <div id="planningPage">
+      <header class="hero">
+        
+        <div>
+          <p class="eyebrow">AI 小当家</p>
+          <h1>这周想吃点什么？</h1>
+        </div>
+        <p class="hero-subtitle">一起把日子，过得有滋有味。</p>
+      </header>
+
+      <div class="page-content planning-content">
+      <section id="chat" class="chat" aria-live="polite">
+        <article class="message assistant-message">
+          <span class="avatar assistant-avatar">👩🏻‍🍳</span>
+          <p>告诉我家里有哪些人、这周想吃什么吧。我会为你做一份刚刚好的菜单。</p>
+        </article>
+
+        <article class="message user-message">
+          <p>我们家有两位成人和一位长者，想吃粤式家常菜，每周两次海鲜，口味清淡，不要超预算。</p>
+          <span class="avatar user-avatar">🙂</span>
+        </article>
+
+        <article class="message assistant-message">
+          <span class="avatar assistant-avatar">👩🏻‍🍳</span>
+          <p>好的！我已经记下来了。还可以告诉我现有食材或特别想吃的菜。</p>
+        </article>
+      </section>
+
+      <section class="quick-actions" aria-label="快捷提问">
+        <button type="button" data-prompt="帮我生成一周食谱"><span aria-hidden="true">🗓️</span>生成一周食谱</button>
+        <button type="button" data-prompt="根据我现有的食材做饭"><span aria-hidden="true">🧺</span>用现有食材做饭</button>
+        <button type="button" data-prompt="请帮我控制本周预算"><span aria-hidden="true">🐷</span>控制本周预算</button>
+      </section>
+
+      <section class="preferences" aria-label="计划偏好">
+        <button id="preferenceToggle" class="preferences-toggle" type="button" aria-expanded="false" aria-controls="preferencePanel">
+          <span class="settings-icon" aria-hidden="true">☷</span>
+          <span><strong>补充我的计划偏好</strong><small>家庭 · 预算 · 口味 · 健康</small></span>
+          <span class="chevron">⌄</span>
+        </button>
+        <div id="preferencePanel" class="preference-panel" hidden>
+          <fieldset>
+            <legend>家庭成员</legend>
+            <div class="chips" data-group="family">
+              <button type="button" data-member="成人">成人</button><button type="button" data-member="儿童">儿童</button><button type="button" data-member="宝宝">宝宝</button><button type="button" data-member="长者">长者</button>
+            </div>
+            <div id="memberCounts" class="member-counts" aria-live="polite"></div>
+          </fieldset>
+          <fieldset>
+            <legend>每周预算</legend>
+            <div class="budget-fields">
+              <label>计价币种<select id="budgetCurrency"><option value="HKD" selected>港币（HK$）</option><option value="CNY">人民币（¥）</option></select></label>
+              <label>预算金额<input id="budgetAmount" type="number" min="0" step="0.01" placeholder="0" /></label>
+            </div>
+            <small id="budgetHint">默认家里已有大米、食用油、酱油、糖和食盐；预算只计本周新买的菜、肉、蛋、奶和水产等食材。</small>
+          </fieldset>
+          <fieldset>
+            <legend>口味偏好</legend>
+            <div class="chips" data-group="flavors">
+              <button type="button">粤菜</button><button type="button">川菜</button><button type="button">西餐</button><button type="button">日式</button><button type="button">家常菜</button>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>菜品主题</legend>
+            <div class="chips" data-group="themes">
+              <button type="button">海鲜</button><button type="button">汤品</button><button type="button">快手菜</button><button type="button">轻食</button><button type="button">一锅料理</button>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>饮食与健康管理</legend>
+            <div class="chips" data-group="health">
+              <button type="button">控糖</button><button type="button">少盐</button><button type="button">少油</button><button id="avoidButton" type="button">过敏 / 忌口</button>
+            </div>
+            <label id="avoidField" class="avoid-field" hidden>请填写需要避免的食材或过敏原
+              <textarea id="avoidInput" rows="2" placeholder="例如：花生、牛奶、香菜、太辣……"></textarea>
+            </label>
+          </fieldset>
+        </div>
+      </section>
+
+      <form id="chatForm" class="composer">
+        <label class="sr-only" for="messageInput">描述你想吃什么</label>
+        <input id="messageInput" autocomplete="off" placeholder="描述你想吃什么……" />
+        <button type="submit" aria-label="发送消息">➜</button>
+      </form>
+
+      </div>
+      </div>
+      <section id="shoppingPage" hidden aria-labelledby="shoppingTitle">
+        <header class="shopping-header has-membership"><div><p class="eyebrow">AI 小当家</p><h1 id="shoppingTitle">采购</h1><p class="hero-subtitle">按整周或每顿准备所需食材。</p><span class="week-badge">♡ 本周的小小采购计划</span></div><button id="membershipOpen" class="membership-pill" type="button">会员 / Upgrade</button></header>
+        <div class="page-content shopping-content">
+        <div class="demo-note">清单按品类汇总 · 每项标注用于哪几顿</div>
+        <section class="budget-card" aria-label="本周预算概览">
+          <div class="budget-top"><div><p>本周预算 <button id="editBudget" class="text-button" type="button">编辑</button></p><strong id="budgetTotal">HK$500</strong></div><span class="basket-art" aria-hidden="true">🧺</span></div>
+          <div class="budget-stats triple"><div><small>预计总支出</small><b id="projectedTotal"></b></div><div><small>实际已支出</small><b id="actualSpent"></b></div><div><small id="remainingLabel">剩余预算</small><b id="budgetRemaining"></b></div></div>
+          <progress id="budgetProgress" max="100" value="0" aria-label="预算使用比例"></progress><p id="budgetStatus" class="budget-status"></p>
+          <button id="optimizeBudget" class="optimize-budget" type="button" hidden>✨ AI 帮我优化</button>
+          <small id="currencyNote"></small>
+        </section>
+        <div class="shopping-tabs" role="group" aria-label="筛选采购状态"><button id="pendingTab" class="selected" type="button" aria-pressed="true" aria-controls="shoppingList">
+          <span class="tab-art pending-art" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M6 15h24l-3 15H9L6 15Z" fill="#F6CF8D" stroke="#9B7146" stroke-width="1.8" stroke-linejoin="round"/><path d="m11 15 5-9m9 9-5-9" stroke="#9B7146" stroke-width="2.2" stroke-linecap="round"/><path d="M14 20v5m8-5v5" stroke="#BA8C54" stroke-width="1.8" stroke-linecap="round"/><path d="M7 15h22" stroke="#9B7146" stroke-width="2.2" stroke-linecap="round"/><path d="M29 5v3m3 2 2-1" stroke="#E7B547" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <span class="tab-copy"><strong>待采购</strong><small>带上清单出发</small></span><span id="pendingCount" class="tab-count">0</span>
+        </button><button id="boughtTab" type="button" aria-pressed="false" aria-controls="shoppingList">
+          <span class="tab-art bought-art" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M9 12h18l2 19H7l2-19Z" fill="#D5E5BD" stroke="#718B52" stroke-width="1.8" stroke-linejoin="round"/><path d="M13 14V9a5 5 0 0 1 10 0v5" stroke="#718B52" stroke-width="1.8" stroke-linecap="round"/><path d="m13 22 3.5 3.5 7-7" stroke="#678448" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/><path d="m29 6 2-2m0 7h3" stroke="#E7B547" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <span class="tab-copy"><strong>已购买</strong><small>好食材到家啦</small></span><span id="boughtCount" class="tab-count">0</span>
+        </button></div>
+        <section id="purchaseScope" class="purchase-scope"><div class="scope-heading"><div><strong>按用餐安排清单</strong><small>可一次选择整周，也可只看某一顿</small></div><button id="selectAllShoppingItems" class="select-all-shopping" type="button">✓ 一键全部勾选</button></div><button id="wholeWeekScope" class="whole-week-scope selected" type="button">全部 7 天</button><div id="mealScopeList" class="meal-scope-list"></div></section>
+        <div class="list-heading"><div><h2>本周采购清单</h2><p>点开食材，修改数量与价格</p></div><button id="addItem" class="add-button" type="button">＋ 添加</button></div>
+        <div id="shoppingList"></div>
+        <section id="selectedPurchaseBar" class="selected-purchase-bar"><div><small>已勾选 <span id="selectedPurchaseCount">0</span> 项</small><strong>共计 <span id="selectedPurchaseTotal">HK$0</span></strong></div><button id="buySelected" type="button" disabled>购买</button></section>
+        <aside class="kitchen-tip"><span aria-hidden="true">🍲</span><div><strong>厨房小贴士</strong><p>大米、食用油、酱油、糖和盐默认不列入采购预算；如果本周刚好用完，再手动添加就好。</p></div></aside>
+        <div class="shopping-summary"><span id="purchaseCount"></span><span>已购合计 <b id="spentTotal"></b></span></div>
+        <p id="estimateNote" class="estimate-note"></p>
+        </div>
+      </section>
+      <dialog id="itemDialog" aria-labelledby="itemDialogTitle"><form id="itemForm"><div class="dialog-heading"><h2 id="itemDialogTitle">编辑食材</h2><button type="button" class="close-dialog" data-close="itemDialog" aria-label="关闭">×</button></div>
+        <label>食材名称<input id="itemName" required maxlength="40" /></label>
+        <label>分类<select id="itemCategory"><option>蔬菜水果</option><option>肉蛋海鲜</option><option>主食调味</option><option>其他</option></select></label>
+        <div class="field-row"><label>数量<input id="itemQuantity" required type="number" min="0.01" step="0.01" /></label><label>单位<input id="itemUnit" required maxlength="10" placeholder="克 / 颗 / 份" /></label></div>
+        <label><span id="estimateLabel">预计总价</span><input id="itemEstimate" required type="number" min="0" step="0.01" /></label>
+        <label><span id="actualLabel">实际总价（可留空）</span><input id="itemActual" type="number" min="0" step="0.01" placeholder="未填写时按预计价格计算" /></label>
+        <small>价格为这一项的总价；修改数量后，请一并调整价格。</small>
+        <div class="dialog-actions"><button id="deleteItem" type="button" class="delete-button">删除食材</button><button type="submit" class="save-button">保存</button></div>
+      </form></dialog>
+      <dialog id="budgetDialog" aria-labelledby="budgetDialogTitle"><form id="budgetForm"><div class="dialog-heading"><h2 id="budgetDialogTitle">设置本周预算</h2><button type="button" class="close-dialog" data-close="budgetDialog" aria-label="关闭">×</button></div>
+        <label>计价币种<select id="shoppingCurrency"><option value="HKD" selected>港币（HK$）</option><option value="CNY">人民币（¥）</option></select></label><label>预算金额<input id="shoppingBudget" type="number" min="0" step="0.01" required /></label>
+        <p class="dialog-help">人民币、港币二选一，与「规划」中的设置同步。切换币种不会换算已有金额，请按新币种核对预算和食材价格。</p><button type="submit" class="save-button full-width">保存预算</button>
+      </form></dialog>
+      <dialog id="shoppingLockedDialog" class="shopping-lock"><div class="dialog-heading"><h2>🔒 Plus Feature</h2><button type="button" class="close-dialog" data-close="shoppingLockedDialog">×</button></div><p>Advanced budget optimization is available for Plus members.</p><a href="index.html" class="save-button full-width">Upgrade to Plus</a></dialog>
+      <dialog id="purchasePlatformDialog" class="purchase-platform-dialog"><div class="dialog-heading"><div><small>Purchase Options</small><h2>请选择购物平台</h2></div><button type="button" class="close-dialog" data-close="purchasePlatformDialog">×</button></div><p id="purchaseRegionStatus">正在根据所在地区推荐…</p><div id="groceryPartnerList" class="grocery-partner-list"></div><a id="offlineMarketMap" class="map-option" target="_blank" rel="noopener">📍 查找附近线下菜场／超市</a><button id="simulatePurchase" class="save-button full-width" type="button">模拟完成购买</button><small>线上平台与地图由第三方提供；Demo 暂未接入真实订单和支付。</small></dialog>
+      <nav class="bottom-nav" aria-label="主导航">
+        <button class="nav-item active" id="planningNav" type="button" aria-current="page"><span>🗓️</span>规划</button>
+        <a class="nav-item" href="weekly-menu.html"><span>🍲</span>一周食谱</a>
+        <button class="nav-item" id="shoppingNav" type="button"><span>🛒</span>采购</button>
+      </nav>
+    </main>
+    <div id="toast" class="toast" role="status"></div>
+    <script src="config.js?v=20261116-10"></script><script src="state.js?v=20261116-9"></script><script src="locale.js?v=20261116-9"></script><script src="pricing.js?v=20261116-10"></script><script src="membership.js?v=20261116-11"></script><script src="shopping-budget.js?v=6"></script>
+  </body>
+</html>
